@@ -178,5 +178,61 @@ def main():
 # PS: Функция-декоратор, применяемая к классу, всегда должна возвращать 
 объект класса
 '''
+''' Декоратор с аргументами.
+def event_handler(mes: str):
+    def call(func):
+        print(mes)
+        def inner_decor(*args):
+            print('inner_decor', args)
+            func(*args)
+        return inner_decor
+    return call
+# Есть отличие, но тоже работает. Нет обработки аргументов func
+# def event_handler(mes: str):
+#     def call(func):
+#         print(mes, 'decor')
+#         return func
+#     return call
+
+@event_handler("btn")
+def func1(*args):
+    print('func11111')
+
+def func2(*args):
+    print('func22222')
+tmp = event_handler('etc')
+func2 = tmp(func2)
+
+def main():
+    func1(1, 2, "func1")
+    func2(1, 2, "func2")
+'''
+
+''' Декоратор для генератора(сопрограммы).
+def decor_for_gener(func):
+    def call(*args, **kwargs):
+        tmp = func(*args, **kwargs)
+        next(tmp)
+        return tmp
+    return call
+
+@decor_for_gener
+def gener(mes:str):
+    print('Im ready for splitting.', mes)
+    result = None
+    while True:
+        print(result)
+        line = (yield result) # Это то же самое, что написать line = (yield); yield result
+        result = line.split()
+
+def main():
+    runner = gener('message')
+    print(runner.send("my big message !"))
+    runner.close()
+'''
+
+def main():
+    pass
+
 if __name__ == "__main__":
     main()
