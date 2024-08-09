@@ -328,7 +328,7 @@ def main():
         print("(END)")
 '''        
 def main():
-    pass
+    print('master')
 
 if __name__ == "__main__":
     main()
