@@ -327,8 +327,38 @@ def main():
     finally:
         print("(END)")
 '''        
+''' Эксперименты с питоном.
+class F():
+    @classmethod
+    def df(cls):
+        return 123
+
+def fe(x): return 42
+def fe(*args): return type(args)
+
+def s(string:list):
+    string += [1]
+    print(string)
+
+from collections import namedtuple
 def main():
-    print('master')
+    f = F()
+    print( "hello" 'world' )
+    print(sum({1:2, 2:3}))
+    t = namedtuple('Point', 'x y')
+    a = t(1, 2)
+    b = t(3, 4)
+    # a.x = 0 # error
+    print(a.x + b.x)
+    g = {1, 7, 9}
+    g.update(i for i in range(10))
+    print(g)
+    print(fe(10))
+    string = []
+    s(string)
+    print(string)
+'''
+    
 
 if __name__ == "__main__":
     main()
