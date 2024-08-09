@@ -230,9 +230,104 @@ def main():
     print(runner.send("my big message !"))
     runner.close()
 '''
+''' Выражение-генератор. Крутость в том, что операция выполняется при вызове __next__() (или исп. for _ in _), а предыдущие вычисления не сохраняются. 
+# Это позволяет повысить скорость и не занимать много памяти.
+def main():
+    a = [1, 2, 3, 4, 5]
+    b = (i*2 if (i % 2 == 1) else 0 for i in a) # Выражение-генератор
+    c = (j/2 for j in b)
+    # while True:
+    #     try: 
+    #         print(b.__next__())
+    #     except:
+    #         print('exit')
+    #         break
+    for bc in c: # только на этом этапе посчитался очередной элемент в b, а затем элемент в c
+        print(bc)
+    
+'''
+
+''' Атрибуты функций. Декоратор функции с комментарием, именем и атрибутами
+def wrap(func):
+    call(*args, **kwargs)
+        return func(*args, **kwargs)
+    call.__doc__ = func.__doc__
+    call.__name__ = func.__name__
+    call.__dict__.update(func.__dict__) # !!!
+    return call
+    
+@wrap
+def main():
+    """ Comment for main """
+    print(main.__dict__, main.__name__, main.__doc__)
+main.my_atribute = 5
+'''
+''' Eval and Exec. eval() для выражений, exec() для кода выполнения
+def main():
+    globals = { 'x': 7,
+                'y': 10,
+                'birds': ['Parrot', 'Swallow', 'Albatross']
+              }
+    locals = { 'x': 5 }
+    # Словари, объявленные выше, используются, как глобальное и
+    # локальное пространства имен при выполнении следующих инструкций
+    a = eval("x + 4 * y", globals, locals)
+    print(a)
+    exec("for b in birds: print(b)", globals, locals)
+'''
+''' @classmethod. 
+class Times(object):
+    factor = 1
+
+    def __init__(self, num:int):
+        self.num = num
+    
+    @classmethod
+    def new_obj(cls):
+        return cls(cls.factor)
+
+    @classmethod
+    def mul(cls, x):
+        return cls.factor * x
+
+class TwoTimes(Times):
+    factor = 2
 
 def main():
-    pass
+    x = TwoTimes.mul(10) # Вызовет Times.mul(TwoTimes, 10) -> 20
+    print(x)
+
+    a = TwoTimes.new_obj()
+    print(a.num)
+
+    b = Times.new_obj()
+    print(b.num)
+'''
+''' Свойства, сеттеры, геттеры и делиттеры. @property
+class Foo(object):
+    def __init__(self, name:str):
+        self.__name = name
+    
+    @property # геттер
+    def name(self): return self.__name
+    @name.setter # сеттер
+    def name(self, new_name:str): self.__name = new_name
+    @name.deleter # делиттер
+    def name(self): raise(Exception('Impossible to delete attribute.'))
+
+def main():
+    f = Foo('Alex')
+    print(f.name)
+    f.name = 'Alexey'
+    print(f.name)
+    try: 
+        del f.name
+    except Exception as e:
+        print(e)
+    finally:
+        print("(END)")
+'''        
+
 
 if __name__ == "__main__":
     main()
