@@ -121,9 +121,9 @@ def main():
     exec('print("Hello World!")')
     a = [1, 2, 3, 4, 5]
     # a = {'a': 1}
-    b = repr(a) # -> "[1, 2, 3, 4, 5]"" # b = list.__repr__(a)
+    b = repr(a) # -> "[1, 2, 3, 4, 5]" # b = list.__repr__(a)
     c = eval(b) # -> [1, 2, 3, 4, 5] # c = b.__eval__()
-    print(a, b, c, eval('[[1, 2], 3,"ert"]'))
+    print(a, type(b), type(c), eval('[[1, 2], 3,"ert"]'))
 '''
 
 ''' Оценка истинности последовательности. all() and any()
@@ -358,9 +358,6 @@ def main():
     s(string)
     print(string)
 '''
-    
-def main():
-    print("changed text")
 
 if __name__ == "__main__":
     main()
