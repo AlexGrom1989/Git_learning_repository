@@ -359,6 +359,8 @@ def main():
     print(string)
 '''
     
+def main():
+    print("BooooB")
 
 if __name__ == "__main__":
     main()
