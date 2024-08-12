@@ -360,7 +360,7 @@ def main():
 '''
     
 def main():
-    print("BooooB")
+    print("lp")
 
 if __name__ == "__main__":
     main()
