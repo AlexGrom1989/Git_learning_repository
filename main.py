@@ -360,7 +360,7 @@ def main():
 '''
     
 def main():
-    print("before the remote command")
+    print("changed text")
 
 if __name__ == "__main__":
     main()
