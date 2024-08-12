@@ -360,7 +360,7 @@ def main():
 '''
     
 def main():
-    print("lpsd")
+    print("there shure be another string")
 
 if __name__ == "__main__":
     main()
