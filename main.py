@@ -360,7 +360,7 @@ def main():
 '''
     
 def main():
-    print("there shure be another string")
+    print("im tryimg again")
 
 if __name__ == "__main__":
     main()
