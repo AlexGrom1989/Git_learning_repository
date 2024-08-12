@@ -360,7 +360,7 @@ def main():
 '''
     
 def main():
-    print("im tryimg again")
+    print("before the remote command")
 
 if __name__ == "__main__":
     main()
