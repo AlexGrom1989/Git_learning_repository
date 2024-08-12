@@ -358,13 +358,9 @@ def main():
     s(string)
     print(string)
 '''
-<<<<<<< HEAD
-
-=======
     
 def main():
     print("lpsd")
->>>>>>> 811df29d27eca4b251d0942bc50e44904a3f1406
 
 if __name__ == "__main__":
     main()
