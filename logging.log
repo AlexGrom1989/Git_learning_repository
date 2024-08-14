@@ -1,0 +1,5 @@
+ERROR     2024-08-15 00:25:06,397        LineNum:518     We have big trubbles in call function
+INFO      2024-08-15 00:25:06,397        LineNum:527     info msg
+WARNING   2024-08-15 00:25:06,397        LineNum:528     warning msg
+ERROR     2024-08-15 00:25:06,397        LineNum:529     error msg
+CRITICAL  2024-08-15 00:25:06,397        LineNum:530     critical msg

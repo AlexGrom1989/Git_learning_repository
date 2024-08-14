@@ -92,6 +92,11 @@ def main():
     types = [int, complex, str]
     box = [tp(value) for tp, value in zip(types, line.split(', '))]
     print(box)
+    a = [(1, 2, 3), (4, 5, 6)]
+    b = zip(*a)
+    print(b) # -> [(1, 4), (2, 5), (3, 6)]
+    print(zip(*b)) # -> [(1, 2, 3), (4, 5, 6)]
+
 '''
 ''' Методы и их вызов.
 class Foo(object):
@@ -405,6 +410,7 @@ class A():
         print(self.a, "BUT", self.__a)
 
 class B(A):
+
     def __init__(self) -> None:
         A.__init__(self)
         self.a = "asd"   
@@ -413,6 +419,118 @@ class B(A):
 def main():
     b = B()
     b.prt()
+    b.dfg = 90
+    print(b.dfg)
+'''
+''' Правила передачи параметров. Позиционные, / , любая передача, *, передача по ключу
+def func(positional_only, /, either, *, keyword_only):
+    print('Done with:', positional_only, either, keyword_only)
+
+def main():
+
+    # Not Allowed
+    # func(positional_only="Frank", "Bob", keyword_only="Alex")
+    # func("Frank", either="Bob", "Alex")
+    # func("Frank", keyword_only="Alex", "Bob")
+
+    # Allowed
+    func("Frank", "Bob", keyword_only="Alex")
+    func("Frank", either="Bob", keyword_only="Alex")
+    func("Frank", keyword_only="Alex", either="Bob")
+'''
+''' Перегрузка операторов.
+class Kop(object):
+    def __init__(self, num):
+        self.num = num
+
+    def __repr__(self): return f"Kop({self.num})"
+    
+    def __str__(self): return "-> %s <-" % (self.num)
+
+    def __add__(self, val): return Kop(self.num + val)
+    # right add => instance after value
+    def __radd__(self, val): return self.__add__(val)
+
+    def __sub__(self, val): return Kop(self.num - val)
+    # right sub => instance after value
+    def __rsub__(self, val): return Kop(val - self.num)
+
+def main():
+    k = Kop(10)
+    print(k + 11)
+    print(11 + k)
+    print(k - 11)
+    print(11 - k)
+'''
+''' Абстрактные классы.
+from abc import abstractmethod, ABCMeta
+class Foo(metaclass=ABCMeta):
+
+    @abstractmethod
+    def spam(self, a, b): pass
+
+    @property
+    def name(self): pass
+
+
+class Grep:
+    def spam(self, a=1, b=2):
+        print("Grep.spam")
+
+Foo.register(Grep)
+
+def main():
+    g = Grep()
+    g.spam()
+    print(isinstance(g, Foo))
+'''
+''' Оператор **
+def calc(a, c, b):
+    return a + b*0 + c
+
+def main():
+    pars = {"a": 2, "b": 4, "c": 6}
+    nums = [2, 6, 4]
+    print(calc(*nums))
+    print(calc(**pars))
+'''
+''' logging
+import logging
+
+logging.basicConfig(
+    filename='logging.log', # файл записи
+    filemode='w', # режим записи
+    level=logging.INFO, # Уровень важности
+    format="%(levelname)-9s %(asctime)-30s LineNum:%(lineno)-7d %(message)s"
+)
+log = logging.getLogger('main')
+
+class FilterFunc(logging.Filter):
+    def __init__(self,name):
+        self.funcName = name
+    def filter(self, record):
+        if self.funcName == record.funcName: return False
+        else: return True
+
+log.addFilter(FilterFunc('func')) # Игнорировать все сообщения из функции func()
+
+# Next, the execute code
+
+def func(num:int):
+    def call():
+        log.error("We have big trubbles in call function") # will react, despite it placed in func()
+    if num == 10: call()
+    else: log.info(f"Don't worry, num equal {num}")
+
+
+def main():
+    func(10)
+    func(12)
+    log.debug("debug msg")
+    log.info("info msg")
+    log.warning("warning msg")
+    log.error("error msg")
+    log.critical("critical msg")
 '''
 if __name__ == "__main__":
-    main()
+    main()    
