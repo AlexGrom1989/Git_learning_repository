@@ -358,6 +358,61 @@ def main():
     s(string)
     print(string)
 '''
+''' Дескрипторы. Самая сложная тема
+class TypedProperty(object):
+    def __init__(self,name,type,value=None):
+        self.name = "_" + name
+        self.type = type
+        self.value = value if value else type()
 
+    def __get__(self,instance,cls):
+        return getattr(instance,self.name,self.value)
+    
+    def __set__(self,instance,value):
+        if not isinstance(value,self.type):
+            raise TypeError("“Значение должно быть типа %s”" % self.type)
+        setattr(instance,self.name,value)
+
+    def __delete__(self,instance):
+        raise AttributeError("“Невозможно удалить атрибут”")
+    
+class Foo(object):
+    name = TypedProperty("name",str)
+    num = TypedProperty("num",int,42)
+    
+    def __init__(self, name, num) -> None:
+        self.name = name
+        self.num = num
+
+    def __str__(self) -> str:
+        return self.name + self.num.__str__()
+    
+
+
+def main():
+    f = Foo('alex', 12)
+    d = Foo("andrey", 13)
+    print(f, d)
+    print(f._name, f.name)
+'''
+''' Минутка полиморфизма. __smth is private attribute.
+class A():
+    def __init__(self) -> None:
+        self.__a = "zxc"
+        self.a = "qwe"
+    
+    def prt(self):
+        print(self.a, "BUT", self.__a)
+
+class B(A):
+    def __init__(self) -> None:
+        A.__init__(self)
+        self.a = "asd"   
+        self.__a = 'rty'
+
+def main():
+    b = B()
+    b.prt()
+'''
 if __name__ == "__main__":
     main()
