@@ -142,7 +142,7 @@ def main():
 def func(n:int=1, *args, **kwargs) -> None:
     print(n)
     print(args)
-    print(params)
+    print(kwargs)
     print('-'*10)
 
 def main():
@@ -518,7 +518,7 @@ log.addFilter(FilterFunc('func')) # Игнорировать все сообще
 
 def func(num:int):
     def call():
-        log.error("We have big trubbles in call function") # will react, despite it placed in func()
+        log.error("We have big troubles in call function") # will react, despite it placed in func()
     if num == 10: call()
     else: log.info(f"Don't worry, num equal {num}")
 
@@ -532,5 +532,9 @@ def main():
     log.error("error msg")
     log.critical("critical msg")
 '''
+def main():
+    a, b, a1, b1 = map(int, input().split())
+    print((max(a, a1), min(b, b1)) if min(b, b1) - max(a, a1) >= 0 else None)
+
 if __name__ == "__main__":
     main()    
