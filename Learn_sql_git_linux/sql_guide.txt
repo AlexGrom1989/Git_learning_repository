@@ -1,0 +1,48 @@
+Создание и Удаление{
+
+CREATE DATABASE ....; => создание бд (CREATE DATABASE shop;)
+DROP DATABASE ....; => удаление бд (DROP DATABASE shop;)
+}
+
+Типы данных{
+
+INT
+VARCHAR => маленький текст(255 симв)
+TEXT => большой текст(65535 симв)
+DATE
+JSON
+}
+
+Создание/удаление таблицы {
+
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT, 	#id типа integer, отличное от пустого, автоувеличивающийся
+    name VARCHAR(30),	  #максимум 30 символов
+    bio TEXT,
+    birth DATE,
+    PRIMARY KEY(id) 	#обеспечивает уникальность полей в скобках (в данном случае id)
+); => создание
+
+DROP TABLE users; => удаление
+}
+
+Добавление/удаление столбца в таблице {
+
+ALTER TABLE users ADD password VARCHAR (32); => добавление 	#добавление столбца password в таблицу users
+ALTER TABLE users DROP password VARCHAR (32); => удаление
+}
+
+Добавление/обновление/удаление записей в ячейках{
+
+INSERT INTO users (name, bio, birth) VALUES
+    ('Alex', 'My Way', '2005-04-04'),
+    ('Alexey', 'My Way2', '2005-05-05'),
+    ('Alexandr', 'My Way3', '2005-06-06'); => добавление
+    
+UPDATE users SET name = 'Maxim', bio = 'Maxim Way' WHERE id >= 2 AND name = 'Alex'; => обновление
+
+ALTER TABLE users CHANGE birth birth2 DATE NOT NULL; => изменение столбца и его параметров 	#birth превратился в birth2, но теперь отличный от паустого
+
+DELETE FROM users WHERE id = 2 OR name = 'Maxim'; => удаление строки
+TRUNCATE users; => очистка всей таблицы
+}
