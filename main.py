@@ -181,7 +181,7 @@ def main():
     func_1()
 
 # PS: Функция-декоратор, применяемая к классу, всегда должна возвращать 
-объект класса
+# объект класса
 '''
 ''' Декоратор с аргументами.
 def event_handler(mes: str):
@@ -213,7 +213,7 @@ def main():
     func2(1, 2, "func2")
 '''
 
-''' Декоратор для генератора(сопрограммы).
+''' Декоратор для генератора/сопрограммы.
 def decor_for_gener(func):
     def call(*args, **kwargs):
         tmp = func(*args, **kwargs)
@@ -254,7 +254,7 @@ def main():
 
 ''' Атрибуты функций. Декоратор функции с комментарием, именем и атрибутами
 def wrap(func):
-    call(*args, **kwargs)
+    def call(*args, **kwargs):
         return func(*args, **kwargs)
     call.__doc__ = func.__doc__
     call.__name__ = func.__name__
@@ -532,9 +532,107 @@ def main():
     log.error("error msg")
     log.critical("critical msg")
 '''
+
+''' Маржа. Присваивание результата переменной и одновременный его возврат.
 def main():
-    a, b, a1, b1 = map(int, input().split())
-    print((max(a, a1), min(b, b1)) if min(b, b1) - max(a, a1) >= 0 else None)
+    if y:=min([1, 2, 3]) == 1: print(y)
+'''
+
+''' Наследование. super. Если super указать 
+# только в подклассе(дочернем), то вызовется метод первого родителя, 
+# иначе если указать везде, то методы будут вызываться в порядке наследования .mro()
+class Person(object):
+ 
+    def __init__(self, name):
+        super().__init__(name)
+        self.__name = name   # имя человека
+ 
+    @property
+    def name(self):
+        return self.__name
+ 
+    def display_info(self):
+        super().display_info()
+        print(f"PName: {self.__name}")
+ 
+class B(object):
+
+    def __init__(self, name):
+        self.__name = name
+
+    def display_info(self):
+        print(f"BName: {self.__name}")
+ 
+class Employee(Person, B):
+ 
+    def __init__(self, name, company):
+        super().__init__(name)
+        self.company = company
+ 
+    def display_info(self):
+        super().display_info()
+        print(f"Company: {self.company}")
+ 
+    def work(self):
+        print(f"{self.name} works")
+
+        
+def main():
+    print(Employee.mro())
+    tom = Employee("Tom", "Microsoft")
+    tom.display_info()  # Name: Tom
+                        # Company: Microsoft
+'''
+
+''' Регулярные выражения regex. import re
+import re
+
+def main():
+    """
+        Расшифровка:
+
+    - `U` - поиск символа U (или любого другого символа, указанного буквально)
+    - `a-z` - любой символ в интервале
+    - `[abc]` - любой из символов a, b или c
+    - `[^abc]` - любой из символов, кроме abc
+    - `.` - любой символ
+    - `\d` - любая цифра (0-9)
+    - `\D` - любой символ, кроме цифры
+    - `\w` - любой символ слова ([a-zA-Z0-9_])
+    - `\s` - любой символ пробела
+    - `{4}` - количество повторений предыдущего токена (4 раза)
+    - `+` - предыдущий токен должен повториться 1 или более раз
+    - `*` - предыдущий токен должен повториться 0 или более раз
+    - `()` - группа захвата
+
+    См. также: [https://regex101.com/](https://regex101.com/)
+    """
+    log_line = '2023-10-27 10:30:00 - ERROR - User [johndoe] attempted login from IP 192.168.1.100'
+    pattern = r'(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+-\s+(\w+)\s+-\s+User\s+\[(\w+)\]\s+attempted\s+login\s+from\s+IP\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+    
+    match = re.search(pattern, log_line) # match - совпадение
+    if match:
+        date, time, level, username, ip = match.groups() # можно разбить по группам захвата (по скобочкам)
+        print(f"Date: {date}, Time: {time}, Level: {level}, Username: {username}, IP: {ip}")
+
+    email = "test.user+alias@example.com"
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    if re.match(pattern, email):
+        print("Valid email address")
+    else:
+        print("Invalid email address")
+
+    text = "This is a sentence with some phone numbers: 123-456-7890 and (555) 123-4567."
+    pattern = r"\(*(\d{3})\D*(\d{3})\D*(\d{4})"
+    replacement = r"(\1) \2-\3"
+
+    print(re.sub(pattern, replacement, text)) # Подстановка групп захвата под шаблон
+
+    text = "I have 10 apples and 20 oranges."
+    pattern = r"\d+(?= apples)"
+
+    print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
+'''
 
 if __name__ == "__main__":
-    main()    
+    main()
