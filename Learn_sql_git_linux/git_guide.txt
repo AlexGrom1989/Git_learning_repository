@@ -20,7 +20,7 @@ git merge .... => объединение ветки с текущей ветко
 
 Глобально (связь с репозиторием) {
 git remote add origin_1 https://github.com/AlexGrom1989/Git_learning_repository.git
-git remote => просмотреть добавленные удаленные репозитории
+git remote => просмотреть добавленные удаленные репозитории (git remote -v)
 git push origin_1 master => отправка ветки master в удаленный репозиторий
 git clone https://github.com/AlexGrom1989/Git_learning_repository.git => копирование содержимого из удаленного репозитория к себе
 git pull origin_1 master => скачивание изменений в ветке master с удаленного репозитория origin_1
@@ -37,3 +37,4 @@ git show .... => просмотр коммита по коду (git show ab14f3b
 git grep "hello" <путь/ветка/сеанс> => поиск по ../../..
 
 }
+
