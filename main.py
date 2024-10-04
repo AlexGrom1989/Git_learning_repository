@@ -1,3 +1,11 @@
+""" Установка в py проекте виртуальной среды .venv/ . Почему это работает только на линуксе епрст емае ааа??!! дурак виндовс
+sudo apt-get install python3-venv
+python3 -m venv .venv
+source .venv/bin/activate
+pip freeze > requirements.txt
+"""
+
+
 
 ''' Генераторы. Пример работы функций-генераторов. Многопоточность.
 numbers = list(range(1, 1000))
