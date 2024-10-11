@@ -592,55 +592,87 @@ def main():
                         # Company: Microsoft
 '''
 
-''' Регулярные выражения regex. import re
-import re
+# ''' Регулярные выражения regex. import re
+# import re
+
+# def main():
+#     """
+#         Расшифровка:
+
+#     - `U` - поиск символа U (или любого другого символа, указанного буквально)
+#     - `a-z` - любой символ в интервале
+#     - `[abc]` - любой из символов a, b или c
+#     - `[^abc]` - любой из символов, кроме abc
+#     - `.` - любой символ
+#     - `\d` - любая цифра (0-9)
+#     - `\D` - любой символ, кроме цифры
+#     - `\w` - любой символ слова ([a-zA-Z0-9_])
+#     - `\s` - любой символ пробела
+#     - `{4}` - количество повторений предыдущего токена (4 раза)
+#     - `+` - предыдущий токен должен повториться 1 или более раз
+#     - `*` - предыдущий токен должен повториться 0 или более раз
+#     - `()` - группа захвата
+
+#     См. также: [https://regex101.com/](https://regex101.com/)
+#     """
+#     log_line = '2023-10-27 10:30:00 - ERROR - User [johndoe] attempted login from IP 192.168.1.100'
+#     pattern = r'(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+-\s+(\w+)\s+-\s+User\s+\[(\w+)\]\s+attempted\s+login\s+from\s+IP\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+    
+#     match = re.search(pattern, log_line) # match - совпадение
+#     if match:
+#         date, time, level, username, ip = match.groups() # можно разбить по группам захвата (по скобочкам)
+#         print(f"Date: {date}, Time: {time}, Level: {level}, Username: {username}, IP: {ip}")
+
+#     email = "test.user+alias@example.com"
+#     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+#     if re.match(pattern, email):
+#         print("Valid email address")
+#     else:
+#         print("Invalid email address")
+
+#     text = "This is a sentence with some phone numbers: 123-456-7890 and (555) 123-4567."
+#     pattern = r"\(*(\d{3})\D*(\d{3})\D*(\d{4})"
+#     replacement = r"(\1) \2-\3"
+
+#     print(re.sub(pattern, replacement, text)) # Подстановка групп захвата под шаблон
+
+#     text = "I have 10 apples and 20 oranges."
+#     pattern = r"\d+(?= apples)"
+
+#     print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
+# '''
+
+import pandas as pd
+import numpy as np
+import faker
+from russian_names import RussianNames
+import random
+import datetime as dt
+
+cities = [
+    "Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань",
+    "Нижний Новгород", "Челябинск", "Самара", "Омск", "Ростов-на-Дону",
+    "Уфа", "Красноярск", "Воронеж", "Пермь", "Волгоград"
+]
+
+fake = faker.Faker()
+
+
 
 def main():
-    """
-        Расшифровка:
+    df = pd.DataFrame()
+    df.index.name = 'id'
+    df['name'] = list(RussianNames(count=1000))
 
-    - `U` - поиск символа U (или любого другого символа, указанного буквально)
-    - `a-z` - любой символ в интервале
-    - `[abc]` - любой из символов a, b или c
-    - `[^abc]` - любой из символов, кроме abc
-    - `.` - любой символ
-    - `\d` - любая цифра (0-9)
-    - `\D` - любой символ, кроме цифры
-    - `\w` - любой символ слова ([a-zA-Z0-9_])
-    - `\s` - любой символ пробела
-    - `{4}` - количество повторений предыдущего токена (4 раза)
-    - `+` - предыдущий токен должен повториться 1 или более раз
-    - `*` - предыдущий токен должен повториться 0 или более раз
-    - `()` - группа захвата
+    for i in range(1000):
 
-    См. также: [https://regex101.com/](https://regex101.com/)
-    """
-    log_line = '2023-10-27 10:30:00 - ERROR - User [johndoe] attempted login from IP 192.168.1.100'
-    pattern = r'(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+-\s+(\w+)\s+-\s+User\s+\[(\w+)\]\s+attempted\s+login\s+from\s+IP\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+        df.loc[i, 'birth_date'] = fake.date_of_birth(minimum_age=17, maximum_age=35)
+        df.loc[i, 'city'] = cities[random.randint(0, len(cities)-1)]
+        df.loc[i, 'admission_year'] = df.loc[i, 'birth_date'].year + 16 + random.randint(1, 3)
     
-    match = re.search(pattern, log_line) # match - совпадение
-    if match:
-        date, time, level, username, ip = match.groups() # можно разбить по группам захвата (по скобочкам)
-        print(f"Date: {date}, Time: {time}, Level: {level}, Username: {username}, IP: {ip}")
+    df['admission_year'] = df['admission_year'].astype(np.int64)
 
-    email = "test.user+alias@example.com"
-    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    if re.match(pattern, email):
-        print("Valid email address")
-    else:
-        print("Invalid email address")
-
-    text = "This is a sentence with some phone numbers: 123-456-7890 and (555) 123-4567."
-    pattern = r"\(*(\d{3})\D*(\d{3})\D*(\d{4})"
-    replacement = r"(\1) \2-\3"
-
-    print(re.sub(pattern, replacement, text)) # Подстановка групп захвата под шаблон
-
-    text = "I have 10 apples and 20 oranges."
-    pattern = r"\d+(?= apples)"
-
-    print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
-'''
+    df.to_csv('students.csv')
 
 if __name__ == "__main__":
     main()
