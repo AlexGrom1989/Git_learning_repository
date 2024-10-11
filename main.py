@@ -592,55 +592,62 @@ def main():
                         # Company: Microsoft
 '''
 
-''' Регулярные выражения regex. import re
-import re
+# ''' Регулярные выражения regex.
+# import re
+
+# def main():
+#     """
+#         Расшифровка:
+
+#     - `U` - поиск символа U (или любого другого символа, указанного буквально)
+#     - `a-z` - любой символ в интервале
+#     - `[abc]` - любой из символов a, b или c
+#     - `[^abc]` - любой из символов, кроме abc
+#     - `.` - любой символ
+#     - `d` - любая цифра (0-9)
+#     - `D` - любой символ, кроме цифры
+#     - `w` - любой символ слова ([a-zA-Z0-9_])
+#     - `s` - любой символ пробела
+#     - `{4}` - количество повторений предыдущего токена (4 раза)
+#     - `+` - предыдущий токен должен повториться 1 или более раз
+#     - `*` - предыдущий токен должен повториться 0 или более раз
+#     - `()` - группа захвата
+
+#     См. также: [https://regex101.com/](https://regex101.com/)
+#     """
+#     log_line = '2023-10-27 10:30:00 - ERROR - User [johndoe] attempted login from IP 192.168.1.100'
+#     pattern = r'(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+-\s+(\w+)\s+-\s+User\s+\[(\w+)\]\s+attempted\s+login\s+from\s+IP\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
+    
+#     match = re.search(pattern, log_line) # match - совпадение
+#     if match:
+#         date, time, level, username, ip = match.groups() # можно разбить по группам захвата (по скобочкам)
+#         print(f"Date: {date}, Time: {time}, Level: {level}, Username: {username}, IP: {ip}")
+
+#     email = "test.user+alias@example.com"
+#     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+#     if re.match(pattern, email):
+#         print("Valid email address")
+#     else:
+#         print("Invalid email address")
+
+#     text = "This is a sentence with some phone numbers: 123-456-7890 and (555) 123-4567."
+#     pattern = r"\(*(\d{3})\D*(\d{3})\D*(\d{4})"
+#     replacement = r"(\1) \2-\3"
+
+#     print(re.sub(pattern, replacement, text)) # Подстановка групп захвата под шаблон
+
+#     text = "I have 10 apples and 20 oranges."
+#     pattern = r"\d+(?= apples)"
+
+#     print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
+# '''
+
+from fake import FAKER
+
+faker = FAKER()
 
 def main():
-    """
-        Расшифровка:
-
-    - `U` - поиск символа U (или любого другого символа, указанного буквально)
-    - `a-z` - любой символ в интервале
-    - `[abc]` - любой из символов a, b или c
-    - `[^abc]` - любой из символов, кроме abc
-    - `.` - любой символ
-    - `\d` - любая цифра (0-9)
-    - `\D` - любой символ, кроме цифры
-    - `\w` - любой символ слова ([a-zA-Z0-9_])
-    - `\s` - любой символ пробела
-    - `{4}` - количество повторений предыдущего токена (4 раза)
-    - `+` - предыдущий токен должен повториться 1 или более раз
-    - `*` - предыдущий токен должен повториться 0 или более раз
-    - `()` - группа захвата
-
-    См. также: [https://regex101.com/](https://regex101.com/)
-    """
-    log_line = '2023-10-27 10:30:00 - ERROR - User [johndoe] attempted login from IP 192.168.1.100'
-    pattern = r'(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2})\s+-\s+(\w+)\s+-\s+User\s+\[(\w+)\]\s+attempted\s+login\s+from\s+IP\s+(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-    
-    match = re.search(pattern, log_line) # match - совпадение
-    if match:
-        date, time, level, username, ip = match.groups() # можно разбить по группам захвата (по скобочкам)
-        print(f"Date: {date}, Time: {time}, Level: {level}, Username: {username}, IP: {ip}")
-
-    email = "test.user+alias@example.com"
-    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    if re.match(pattern, email):
-        print("Valid email address")
-    else:
-        print("Invalid email address")
-
-    text = "This is a sentence with some phone numbers: 123-456-7890 and (555) 123-4567."
-    pattern = r"\(*(\d{3})\D*(\d{3})\D*(\d{4})"
-    replacement = r"(\1) \2-\3"
-
-    print(re.sub(pattern, replacement, text)) # Подстановка групп захвата под шаблон
-
-    text = "I have 10 apples and 20 oranges."
-    pattern = r"\d+(?= apples)"
-
-    print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
-'''
+    print(faker.name())
 
 if __name__ == "__main__":
     main()
