@@ -592,7 +592,11 @@ def main():
                         # Company: Microsoft
 '''
 
+<<<<<<< HEAD
 # ''' Регулярные выражения regex.
+=======
+# ''' Регулярные выражения regex. import re
+>>>>>>> origin/master
 # import re
 
 # def main():
@@ -604,10 +608,17 @@ def main():
 #     - `[abc]` - любой из символов a, b или c
 #     - `[^abc]` - любой из символов, кроме abc
 #     - `.` - любой символ
+<<<<<<< HEAD
 #     - `d` - любая цифра (0-9)
 #     - `D` - любой символ, кроме цифры
 #     - `w` - любой символ слова ([a-zA-Z0-9_])
 #     - `s` - любой символ пробела
+=======
+#     - `\d` - любая цифра (0-9)
+#     - `\D` - любой символ, кроме цифры
+#     - `\w` - любой символ слова ([a-zA-Z0-9_])
+#     - `\s` - любой символ пробела
+>>>>>>> origin/master
 #     - `{4}` - количество повторений предыдущего токена (4 раза)
 #     - `+` - предыдущий токен должен повториться 1 или более раз
 #     - `*` - предыдущий токен должен повториться 0 или более раз
@@ -642,12 +653,46 @@ def main():
 #     print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
 # '''
 
+<<<<<<< HEAD
 from fake import FAKER
 
 faker = FAKER()
 
 def main():
     print(faker.name())
+=======
+import pandas as pd
+import numpy as np
+import faker
+from russian_names import RussianNames
+import random
+import datetime as dt
+
+cities = [
+    "Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань",
+    "Нижний Новгород", "Челябинск", "Самара", "Омск", "Ростов-на-Дону",
+    "Уфа", "Красноярск", "Воронеж", "Пермь", "Волгоград"
+]
+
+fake = faker.Faker()
+
+
+
+def main():
+    df = pd.DataFrame()
+    df.index.name = 'id'
+    df['name'] = list(RussianNames(count=1000))
+
+    for i in range(1000):
+
+        df.loc[i, 'birth_date'] = fake.date_of_birth(minimum_age=17, maximum_age=35)
+        df.loc[i, 'city'] = cities[random.randint(0, len(cities)-1)]
+        df.loc[i, 'admission_year'] = df.loc[i, 'birth_date'].year + 16 + random.randint(1, 3)
+    
+    df['admission_year'] = df['admission_year'].astype(np.int64)
+
+    df.to_csv('students.csv')
+>>>>>>> origin/master
 
 if __name__ == "__main__":
     main()
