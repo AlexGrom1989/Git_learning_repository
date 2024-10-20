@@ -592,11 +592,7 @@ def main():
                         # Company: Microsoft
 '''
 
-<<<<<<< HEAD
-# ''' Регулярные выражения regex.
-=======
 # ''' Регулярные выражения regex. import re
->>>>>>> origin/master
 # import re
 
 # def main():
@@ -608,17 +604,10 @@ def main():
 #     - `[abc]` - любой из символов a, b или c
 #     - `[^abc]` - любой из символов, кроме abc
 #     - `.` - любой символ
-<<<<<<< HEAD
-#     - `d` - любая цифра (0-9)
-#     - `D` - любой символ, кроме цифры
-#     - `w` - любой символ слова ([a-zA-Z0-9_])
-#     - `s` - любой символ пробела
-=======
 #     - `\d` - любая цифра (0-9)
 #     - `\D` - любой символ, кроме цифры
 #     - `\w` - любой символ слова ([a-zA-Z0-9_])
 #     - `\s` - любой символ пробела
->>>>>>> origin/master
 #     - `{4}` - количество повторений предыдущего токена (4 раза)
 #     - `+` - предыдущий токен должен повториться 1 или более раз
 #     - `*` - предыдущий токен должен повториться 0 или более раз
@@ -652,15 +641,7 @@ def main():
 
 #     print(re.findall(pattern, text)) # Поиск всех совпадений в тексте
 # '''
-
-<<<<<<< HEAD
-from fake import FAKER
-
-faker = FAKER()
-
-def main():
-    print(faker.name())
-=======
+''' Создание архитектуры базы данных для ЛБ2 3 семестр.
 import pandas as pd
 import numpy as np
 import faker
@@ -676,23 +657,214 @@ cities = [
 
 fake = faker.Faker()
 
+faculties = {
+    "Факультет информационных технологий": [
+        "Программная инженерия",
+        "Информационные системы",
+        "Кибербезопасность"
+    ],
+    "Факультет экономики и финансов": [
+        "Экономика",
+        "Бухгалтерский учет",
+        "Маркетинг"
+    ],
+    "Факультет гуманитарных наук": [
+        "Психология",
+        "Социология",
+        "История"
+    ],
+    "Факультет естественных наук": [
+        "Биология",
+        "Химия",
+        "Физика"
+    ],
+    "Факультет юриспруденции": [
+        "Правоведение",
+        "Уголовное право",
+        "Гражданское право"
+    ],
+    "Факультет медицины": [
+        "Общая медицина",
+        "Стоматология",
+        "Фармацевтика"
+    ],
+    "Факультет архитектуры": [
+        "Архитектура",
+        "Дизайн интерьеров",
+        "Градостроительство"
+    ],
+    "Факультет искусства": [
+        "Изобразительное искусство",
+        "Музыка",
+        "Театр"
+    ],
+    "Факультет иностранных языков": [
+        "Английский язык",
+        "Французский язык",
+        "Испанский язык"
+    ],
+    "Факультет педагогики": [
+        "Педагогика",
+        "Психология образования",
+        "Специальное образование"
+    ],
+    "Факультет физической культуры": [
+        "Спорт",
+        "Фитнес",
+        "Туризм"
+    ],
+    "Факультет сельского хозяйства": [
+        "Агрономия",
+        "Ветеринария",
+        "Агроинженерия"
+    ],
+    "Факультет социальных наук": [
+        "Политология",
+        "Экономическая социология",
+        "Социальная работа"
+    ],
+    "Факультет авиации и космонавтики": [
+        "Авиастроение",
+        "Космические технологии",
+        "Пилотирование"
+    ],
+    "Факультет электроники": [
+        "Электронные системы",
+        "Нанотехнологии",
+        "Автоматизация"
+    ]
+}
+fac_names = faculties.keys()
+faculties = {''.join([j[0] for j in i.split()]).upper():faculties[i] for i in faculties}
+spec_to_fac = {i:f for f in faculties.keys() for i in faculties[f]}
 
 
-def main():
+def make_students():
     df = pd.DataFrame()
-    df.index.name = 'id'
+    df.index.name = 'student_id'
     df['name'] = list(RussianNames(count=1000))
 
     for i in range(1000):
 
-        df.loc[i, 'birth_date'] = fake.date_of_birth(minimum_age=17, maximum_age=35)
+        df.loc[i, 'birth_date'] = fake.date_of_birth(minimum_age=18, maximum_age=23)
         df.loc[i, 'city'] = cities[random.randint(0, len(cities)-1)]
-        df.loc[i, 'admission_year'] = df.loc[i, 'birth_date'].year + 16 + random.randint(1, 3)
+        df.loc[i, 'admission_year'] = df.loc[i, 'birth_date'].year + 16 + random.randint(1, 2)
     
     df['admission_year'] = df['admission_year'].astype(np.int64)
 
-    df.to_csv('students.csv')
->>>>>>> origin/master
+    # df.to_csv('students.csv')
+    return df.copy()
 
+
+def make_groups():
+    df = pd.DataFrame()
+    df.index.name = 'group_id'
+
+    df['students_amount'] = [25]*40
+    df['exam_date'] = [fake.date_between_dates(dt.date(2024, 5, 10), dt.date(2024, 6, 30)) for _ in range(len(df.students_amount))]
+
+    # df.to_csv('groups.csv')
+    return df.copy()
+
+
+def make_facs():
+    df = pd.DataFrame()
+
+    df['faculty_code'] = faculties.keys()
+    df['faculty_name'] = fac_names
+    df['dekan'] = list(RussianNames(count=len(df.faculty_code)))
+    df['place_amount'] = [random.randint(75, 100) for _ in range(len(df.faculty_code))]
+
+    # df.to_csv('faculties.csv', index=False)
+    return df.copy()
+
+
+def make_specs(fac):
+    df = pd.DataFrame()
+    df.index.name = 'spec_id'
+
+    df['spec_name'] = [j for i in faculties for j in faculties[i]]
+    df['faculty_code'] = [spec_to_fac[i] for i in df.spec_name]
+
+    # df.to_csv('specs.csv')
+    return df.copy()
+
+
+def make_edus(fac, spec, student, group):
+    df = pd.DataFrame()
+    
+    df['student_id'] = student.index
+
+    tmp = group['students_amount']
+    for i in range(len(df.student_id)):
+
+        id = random.choice(tmp.index)
+        df.loc[i, 'group_id'] = id
+
+        tmp.loc[id] -= 1
+        if tmp.loc[id] == 0: 
+            tmp = tmp.drop(id, axis=0)
+
+    # tmp = spec['faculty_code']
+    # tmp = tmp.copy().map(fac.set_index('faculty_code')['place_amount']) # Не пригодилось, но умение важное
+
+    tmp = fac[['faculty_code', 'place_amount']]
+
+    for i in range(len(group.index)):
+        id = random.choice(tmp.index)
+        sp = random.choice(faculties[tmp['faculty_code'][id]])
+        df.loc[df.group_id == i, 'spec_id'] = spec[spec.spec_name == sp].index[0]
+        
+        tmp.loc[id, 'place_amount'] -= 25
+        if tmp.loc[id, 'place_amount'] // 25 == 0:
+            tmp = tmp.drop(id, axis=0)
+
+    df = df.astype('int')
+            
+    grants = [0, 3500, 4500, 5700, 15000]
+    df['stipend'] = random.choices(grants, weights=[0.5, 0.2, 0.2, 0.15, 0.05], k=len(df.student_id))
+
+    # df.to_csv('edu.csv', index=False)
+
+
+
+
+def main():
+    student = make_students()
+    group = make_groups()
+    fac = make_facs()
+    spec = make_specs(fac=fac)
+    make_edus(fac=fac, spec=spec, student=student, group=group)
+'''
+
+
+''' Мусор. ДЗ ЦК
+import datetime
+
+
+def gift_count(budget, month, birthdays):
+
+    s = ''
+
+    for name, dt in list(birthdays.items()):
+        if dt.month != month: birthdays.pop(name)
+        else: 
+            if s != '': s += ', '
+            s += f'{name} ({dt.strftime("%d.%m.%Y")})'
+    
+    if s == '':
+        print("В этом месяце нет именинников.")
+    else:
+        print(f"Именинники в месяце {month}: {s}. При бюджете {budget} они получат по {int(budget/len(birthdays))} рублей.")
+    
+
+
+def main():
+    birthdays = {"Иванов Иван Иванович": datetime.date(1989, 5, 1), "Петров Петр Петрович": datetime.date(1998, 5, 6)}
+
+    gift_count(20000, 5, birthdays)
+
+    gift_count(budget=20000, month=5, birthdays=birthdays)
+'''
 if __name__ == "__main__":
     main()
