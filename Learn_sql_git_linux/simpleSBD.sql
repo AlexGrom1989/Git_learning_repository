@@ -34,7 +34,7 @@ begin
 	for i in 1..100000000 loop
 		
 		for j in 1..3 loop
-			fio_code := fio_code || letter[1+floor(random()*19)];
+			fio_code := fio_code || letter[1+floor(random()*20)];
 		end loop;
 		
 		birth := st_date + (random() * (fin_date - st_date + 1))::int;
@@ -43,7 +43,7 @@ begin
 		insert into students (name, groupID, dateOfBirth, city, admission_year)
 		values (
 			'Student ' || fio_code || '_' || i,
-			letter[1+floor(random()*19)] || '::' || admis_date || '::' || (i % 17000),
+			letter[1+floor(random()*20)] || '::' || admis_date || '::' || (i % 17000),
 			birth,
 			(select name from cities order by random() limit 1),
 			admis_date
@@ -62,7 +62,7 @@ select insert_func();
 create table faculties (
 	faculty_code text primary key,
 	name text,
-	students_amount integer default 1050000,
+	students_amount integer default 5100000,
 	specs jsonb default '{"specs": ["Basic", "Intermediate", "Professional"]}',
 	dekan text
 );
@@ -116,3 +116,30 @@ $$ language plpgsql;
 
 select insert_edu();
 
+-- Создадим пользователя test с подключением к нашей БД
+create user test with password 'test12345';
+grant connect on database "simpleStudBase" to test;
+
+-- Выдадим полные права для пользователя test на таблицу students
+grant select, insert, delete, update on students to test;
+grant usage, select on sequence students_id_seq to test; -- права к последовательности id-шников студентов
+
+-- Выдадим ограниченные права записи для пользователя на таблицу faculties
+grant select, update (specs) on faculties to test;
+
+-- Выдадим только право чтения для пользователя test на таблицу edu
+grant select on edu to test;
+
+-- Представление, описывающее фактическое кол-во человек на факультете
+create view stud_amount_in_faculty_view as 
+select left(students.groupid, 1) as fac_code, count(*) as stud_amount from students inner join edu on edu.groupid = students.groupid group by fac_code;
+
+-- Создадим роль (роль можно присваивать нескольким пользователям)
+create role test_role;
+
+--Выдадим особые права этой роли
+grant update (mean_stipend, edu_year) on edu to test_role;
+grant select on stud_amount_in_faculty_view to test_role;
+
+-- Присвоим роль test_role пользователю test
+grant test_role to test;

@@ -95,7 +95,11 @@ exit -- выйти из psql
 \du -- вывод списка владельцев и их права / список ролей (alexpsql и postgres в моем случае)
 \dp -- вывод таблиц с правами доступа к ним
 
--- Добавление, изменение и удаление владельцев/ролей:
+-- Добавление, изменение и удаление пользователей и ролей (роль можно присваивать нескольким пользователям, но в целом функционал похожий. Т.е. если только один пользователь, то и роль не нужна и наоборот):
+
+CREATE USER <user_name> WITH PASSWORD '1234567890'; -- создаем пользователя
+GRANT CONNECT ON DATABASE <db_name> to <user_name>; -- подключаем его к БД
+
 -- CREATE ROLE <role_name> LOGIN; -- не понял зачем таки писать login, но вроде как разрешение данной роли подключение к БД. Нах надо как-будто.
 CREATE ROLE <role_name> WITH password '12345';
 ALTER ROLE <role_name> WITH superuser;
@@ -103,12 +107,17 @@ DROP ROLE <role_name>;
 
 SELECT current_user, session_user; -- узнать текущую роль, на которой работаешь
 SET ROLE <role_name>; -- переключиться на новую роль
-SET SESSION AUTHORIZATION <role_name>; -- поменять пользователя таблицы на новую роль
+SET SESSION AUTHORIZATION <role_name>; -- поменять пользователя текущей сессии
 
 GRANT SELECT ON <table_name> TO <role_name>; -- предоставление права чтения таблицы <table_name> роли <role_name>
 REVOKE SELECT ON <table_name> FROM <role_name>; -- удаление права чтения
 -- Вместо SELECT можно писать другие привелегии, например UPDATE, INSERT, DELETE, TRUNCATE, EXECUTE(относится к функциям в бд) и др.
 
+GRANT <role_name> to <user_name>; -- присвоить роль пользователю
+
+-- Пример:
+GRANT SELECT, UPDATE (name, surname) ON students TO testRole;
+GRANT SELECT ON myView to testRole; -- выдадим доступ к представлению myView для роли testRole
 /* ========================================== */
 /* Транзакции. Все еще работа внутри БД       */
 /* ========================================== */
