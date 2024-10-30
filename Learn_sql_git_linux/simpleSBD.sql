@@ -143,3 +143,4 @@ grant select on stud_amount_in_faculty_view to test_role;
 
 -- Присвоим роль test_role пользователю test
 grant test_role to test;
+

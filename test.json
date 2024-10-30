@@ -1,0 +1,6 @@
+[
+    {"task": "Task 1", "status": "completed", "priority": "high"},
+    {"task": "Task 2", "status": "pending", "priority": "low"},
+    {"task": "Task 3", "status": "completed", "priority": "medium"},
+    {"task": "Task 4", "status": "pending", "priority": "high"}
+]

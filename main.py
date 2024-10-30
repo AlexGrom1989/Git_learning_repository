@@ -866,5 +866,100 @@ def main():
 
     gift_count(budget=20000, month=5, birthdays=birthdays)
 '''
+
+# import re
+
+# def check_string(string) -> bool:
+#     phone = re.match(r'^\w+(\.\w+)*@\w{2,}(\.\w{2,})*$', string)
+#     mail = re.match(r'^(\+7|8){0,1}\D{0,2}\d{3}\D{0,2}\d{3}\D{0,1}\d{2}\D{0,1}\d{2}$', string)
+#     return phone, mail
+
+
+# ss = '''89160000000
+# 8916000000000
+# +79160000000
+# 9160000000
+# 8(916)000-00-00
+# +7(916)000-00-00
+# (916)000-00-00
+# 8 (916) 000-00-00
+# +7 (916) 000-00-00
+# (916) 000-00-00
+# 8(916)0000000
+# +7(916)0000000
+# (916)0000000
+# 8-916-000-00-00
+# +7-916-000-00-00
+# 916-000-00-00'''.split('\n')
+
+# def main():
+    
+#     for i in ss:
+#         print(check_string(i))
+        
+
+'''
+import json
+
+def main():
+    tmp = json.dumps({"asdf":1,  "qweew": [{"afsg": 22, "234tfds": 33}]})
+    tmp = json.loads(tmp)
+    print(type(tmp), tmp)
+'''
+# '''
+# import re
+
+# def is_valid_expression(expression):
+#     ex = expression
+#     if ex.count('(') != ex.count(')'): return False
+    
+#     rex = re.match(r'^([\/\*\-\+ \(]*\d*[ \/\*\-\+\)]*)*$', ex)
+    
+#     print(rex)
+
+# def main():
+#     is_valid_expression('(8 + (345 + 13) / 9 * 6 - 12)')
+# '''
+'''
+import json
+
+def generate_task_report(filename):
+    
+    with open(filename, 'r') as f:
+        data = json.loads(f.read())
+    
+    res = {
+        'total_tasks': 0,
+        'completed_tasks': 0,
+        'high_priority_tasks': 0
+    }
+
+    for i in data:
+        res['total_tasks'] += 1
+        res['high_priority_tasks'] += i['priority'] == 'high'
+        res['completed_tasks'] += i['status'] == 'completed'
+
+    return json.dumps(res)
+
+def main():
+    print(generate_task_report('test.json'))
+'''
+'''
+def count_word_occurrences(filename, word):
+    import re
+    
+    answer = 0
+    
+    with open(filename, 'r') as f:
+        while r := f.readline():
+            answer += len(re.findall(rf'\b{word}\b', r.lower()))
+    
+    return f"Слово '{word}' встречается в файле '{filename}' {answer} раз."
+
+def main():
+    print(count_word_occurrences('test.txt', 'tnyn'))
+'''
+
+
 if __name__ == "__main__":
     main()
