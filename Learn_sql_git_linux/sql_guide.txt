@@ -174,3 +174,10 @@ CREATE VIEW poisk AS
 SELECT groupID, count(*) from students group by groupID;
 
 SELECT * FROM poisk;
+
+
+/* ========================================== */
+/* Работа с функциями, курсорами и индексами  */
+/* ========================================== */
+
+-- см. файл script_for_4_lb_bd.sql

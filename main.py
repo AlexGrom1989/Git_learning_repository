@@ -959,6 +959,338 @@ def count_word_occurrences(filename, word):
 def main():
     print(count_word_occurrences('test.txt', 'tnyn'))
 '''
+'''
+class Calculator(object):
+    last = None
+    
+    def __init__(self):
+        self._history = []
+        
+    def sum(self, a, b):
+        c = a + b
+        Calculator.last = f'sum({a}, {b}) == {c}'
+        self._history.append(Calculator.last)
+        return c
+        
+    def sub(self, a, b):
+        c = a - b
+        Calculator.last = f'sub({a}, {b}) == {c}'
+        self._history.append(Calculator.last)
+        return c
+
+    def mul(self, a, b):
+        c = a * b
+        Calculator.last = f'mul({a}, {b}) == {c}'
+        self._history.append(Calculator.last)
+        return c
+    
+    def div(self, a, b, mod=False):
+        c = a % b if mod else a / b
+        Calculator.last = f'div({a}, {b}) == {c}'
+        self._history.append(Calculator.last)
+        return c
+    
+    def history(self, n):
+        if n > len(self._history): return 0
+        return self._history[-n]
+        
+    @classmethod
+    def clear(cls):
+        cls.last = None
+        
+        
+def main():
+    c = Calculator()
+    c.sum(1, 2)
+    print(c.history(1))
+    print(c.last)
+    print(Calculator.last)
+'''
+'''
+class BaseWallet(object):
+    def __init__(self, name, amount):
+        self.c_name = 'Base Wallet'
+        self.name = name
+        self.amount = amount
+        self.exchange_rate = 1
+
+    def calc(self, other, l_func):
+        if type(self) == type(other):
+            return self.__class__(self.name, l_func(self.amount, other.amount))
+        elif hasattr(other, 'amount'): 
+            tmp = RubleWallet('tmp', l_func(self.to_base(), other.to_base()))
+            return self.__class__(self.name, tmp.amount / self.exchange_rate)
+        else:
+            return self.__class__(self.name, l_func(self.amount, other))
+
+    def __add__(self, other):
+        return self.calc(other, lambda x, y: x + y)
+    def __radd__(self, other): return self.__add__(other)
+
+
+    def __sub__(self, other, r_flag=-1):
+        return self.calc(other, lambda x, y: -r_flag*(x - y))
+    def __rsub__(self, other): return self.__sub__(other, r_flag=1)
+
+
+    def __truediv__(self, other, r_flag=0):
+        return self.calc(other, lambda x, y: (x/y, y/x)[r_flag])
+    def __rtruediv__(self, other): return self.__truediv__(other, r_flag=1)
+
+
+    def __mul__(self, other):
+        return self.calc(other, lambda x, y: x * y)
+    def __rmul__(self, other): return self.__mul__(other)
+
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self.amount == other.amount
+
+
+    def spend_all(self):
+        self.amount = min(0, self.amount)
+
+    def to_base(self):
+        return self.amount * self.exchange_rate
+    
+    def __str__(self):
+        return f"{self.c_name} {self.name} {self.amount}"
+
+    # def __str__(self):
+    #     return f"name: {self.name}, amount: {self.amount}, e_rate: {self.exchange_rate}"
+
+class RubleWallet(BaseWallet):
+    def __init__(self, name, amount):
+        super().__init__(name, amount)
+        self.c_name = 'Ruble Wallet'
+        self.exchange_rate = 1
+
+class DollarWallet(BaseWallet):
+    def __init__(self, name, amount):
+        super().__init__(name, amount)
+        self.c_name = 'Dollar Wallet'
+        self.exchange_rate = 60
+
+class EuroWallet(BaseWallet):
+    def __init__(self, name, amount):
+        super().__init__(name, amount)
+        self.c_name = 'Euro Wallet'
+        self.exchange_rate = 70
+    
+
+def main():
+    r = RubleWallet('x', 1)
+    d = DollarWallet('d', 1)
+    e = EuroWallet('e', 1)
+    
+    print(
+        10 / r,
+        r / 10,
+        r == r,
+        sep='\n'
+
+    )'''
+'''
+import datetime
+class Meeting(object):
+
+    def __init__(self, name, date, start_time, duration):
+        self.name = name
+        self.date = date
+        self.start_time = start_time
+        self.duration = duration
+        self._duration = datetime.timedelta(hours=duration//60, minutes=duration%60)
+        self.participants = []
+    
+    @property
+    def end_time(self):
+        meet_datetime = datetime.datetime.combine(self.date, self.start_time)
+        return (meet_datetime + self._duration).time()
+
+    def get_participants(self):
+        return self.participants
+
+    def __lt__(self, other):
+        return self.start_time < other.start_time and self.date == other.date or self.date < other.date
+
+    # def __str__(self):
+    #     return f"{self.date} {self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')}: {self.name}"
+    # def __repr__(self): return self.__str__()
+
+class Employee(object):
+
+    def __init__(self, name):
+        self.name = name
+        self.schedule = []
+
+    def add_meeting(self, meeting):
+
+        for i in self.schedule:
+            if meeting.start_time < i.end_time and meeting.start_time > i.start_time and meeting.date == i.date:
+                return False
+
+        meeting.participants.append(self.name)
+        self.schedule.append(meeting)
+        return True
+
+    def get_schedule(self):
+        # return sorted(self.schedule)
+        sorted_schedule = sorted(self.schedule)
+        return [
+            f"{m.date} {m.start_time.strftime('%H:%M')} - {m.end_time.strftime('%H:%M')}: {m.name}"
+            for m in sorted_schedule
+        ]
+
+def main():
+    employee1 = Employee("Борис Петров")
+    employee2 = Employee("Иван Иванов")
+
+    # Создаем встречу, указывая название, дату, начало и длительность встречи
+    meeting1 = Meeting("Встреча с клиентом", datetime.date(2024, 9, 10), datetime.time(10, 0), 60)
+    print(meeting1.name)  # Выведет "Встреча с клиентом"
+    print(meeting1.date)  # Выведет datetime.date(2024, 9, 10)
+    print(meeting1.start_time)  # Выведет datetime.time(10, 0)
+    print(meeting1.duration)  # Выведет 60
+    print(meeting1.participants)  # Выведет [] (пустой список, так как пока нет участников)
+
+    # Время окончания встречи рассчитано автоматически на основе start_time и duration
+    print(meeting1.end_time)  # Выведет datetime.time(11, 0)
+
+    # Создаем еще одну встречу
+    meeting2 = Meeting("Планерка", datetime.date(2024, 9, 11), datetime.time(14, 0), 30)
+    meeting3 = Meeting("asdfgh", datetime.date(2024, 9, 11), datetime.time(14, 29), 30)
+    #Добавляем встречи в расписания сотрудников
+    employee1.add_meeting(meeting1)
+    employee2.add_meeting(meeting2)
+
+    print(employee1.get_schedule()) # Выведет ['2024-09-10 10:00 - 11:00: Встреча с клиентом']
+    print(employee2.get_schedule()) # Выведет ['2024-09-11 14:00 - 14:30: Планерка']
+
+    # Добавление второй встречи в расписание Бориса
+    employee1.add_meeting(meeting2)
+
+    employee1.add_meeting(meeting3)
+
+    print(employee1.get_schedule()) # Выведет ['2024-09-10 10:00 - 11:00: Встреча с клиентом', '2024-09-11 14:00 - 14:30: Планерка']
+
+    print(meeting2.get_participants()) # Выведет ['Иван Иванов', 'Борис Петров']
+'''
+'''
+import re
+class Field(object):
+
+    def __init__(self):
+        self.table = dict()
+    
+    @staticmethod
+    def reshape(key):
+
+        if not isinstance(key, (tuple, str)):
+            raise TypeError
+        
+        if type(key) == tuple: key = str(key[0]) + str(key[1])
+        key = key.lower()
+
+        re_key = re.findall(r'[a-z]{1}\d+|\d+[a-z]{1}', key)
+
+        if len(re_key) != 1 or re_key[0] != key:
+            raise ValueError
+        
+        if key[0].isdigit(): key = key[-1] + key[:-1]
+        
+        return key
+
+    
+    def __getitem__(self, key):
+        try:
+            return self.table[self.reshape(key)]
+        except KeyError: return None
+        except ValueError as e: raise e
+        except TypeError as e: raise e
+
+    def __setattr__(self, name, value):
+        if name[0].isalpha() and name[1].isdigit():
+            super().__setattr__(self.reshape(name), value)
+            super().__setattr__(self.reshape(name).upper(), value)
+            self.table[self.reshape(name)] = value
+        else:
+            super().__setattr__(name, value)
+
+    def __setitem__(self, key, value):
+        self.__setattr__(self.reshape(key), value)
+
+    def __delattr__(self, name):
+        if name[0].isalpha() and name[1].isdigit():
+            super().__delattr__(name.lower())
+            super().__delattr__(name.upper())
+            del self.table[self.reshape(name)]
+        else:
+            super().__delattr__(name)
+    
+    def __delitem__(self, key):
+        self.__delattr__(self.reshape(key))
+
+    def __contains__(self, key):
+        return self.reshape(key) in self.table
+
+    def __iter__(self):
+        for value in self.table:
+            yield self.table[value]
+
+
+def main():
+    f = Field()
+    f[12, 's'] = 2
+    f.d2d23 = 3
+    print(f.table, f.__dict__)'''
+    
+'''
+class Fraction(object):
+    def __init__(self, ch:int, zn:int):
+        if zn <= 0: raise ValueError("Знаменатель не может быть нулевым или отрицательным")
+        
+        nod = Fraction.evk(abs(ch), abs(zn))
+        self.ch = ch // nod
+        self.zn = zn // nod
+
+    @staticmethod
+    def evk(f, s):
+        while f * s != 0:
+            if f >= s: f %= s
+            else: s %= f
+        return max(f, s)
+
+    def __str__(self):
+        return f"{self.ch}/{self.zn}"
+
+    def __add__(self, other):
+        return Fraction(self.ch*other.zn + other.ch*self.zn, self.zn * other.zn)
+
+    def __sub__(self, other):
+        return Fraction(self.ch*other.zn - other.ch*self.zn, self.zn * other.zn)
+
+    def __mul__(self, other):
+        return Fraction(self.ch * other.ch, self.zn * other.zn)
+    
+    def __truediv__(self, other):
+        if other.ch == 0: raise ZeroDivisionError
+        return Fraction(self.ch * other.zn, self.zn * other.ch)
+    
+    def __eq__(self, other):
+        return self.__str__() == other.__str__()
+    
+    def __lt__(self, other):
+        return self.ch/self.zn < other.ch/other.zn
+
+
+
+def main():
+    print(
+        Fraction.evk(1, 2),
+        Fraction(1, 2) != Fraction(20, 35)
+
+    )'''
+
 
 
 if __name__ == "__main__":
